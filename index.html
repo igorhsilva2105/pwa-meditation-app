@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenFlow - App de Meditação</title>
+    <title>ZenFlow - App de Meditação Avançado</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="styles.css">
     <meta name="theme-color" content="#4A90E2">
@@ -11,26 +11,37 @@
     <link rel="icon" href="icon-192.png" sizes="192x192">
     <link rel="icon" href="icon-512.png" sizes="512x512">
     <link rel="apple-touch-icon" href="icon-192.png">
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header>
         <h1>ZenFlow</h1>
-        <nav>
-            <button id="home-btn">Início</button>
-            <button id="timer-btn">Temporizador</button>
-            <button id="guided-btn">Guiadas</button>
-            <button id="stats-btn">Estatísticas</button>
-            <button id="settings-btn">Configurações</button>
-        </nav>
     </header>
 
     <main>
         <!-- Seção Início -->
         <section id="home" class="active">
             <h2>Bem-vindo ao ZenFlow</h2>
-            <p>Encontre paz e equilíbrio com meditações diárias.</p>
+            <p>Encontre paz e equilíbrio com meditações diárias personalizadas.</p>
+            <div id="daily-carousel">
+                <!-- Carousel items -->
+                <div class="carousel-item active">
+                    <h3>Meditação do Dia</h3>
+                    <p>Respiração Profunda (10 min)</p>
+                    <button class="start-daily">Iniciar</button>
+                </div>
+                <div class="carousel-item">
+                    <h3>Citação Diária</h3>
+                    <blockquote>"A paz vem de dentro. Não a procure fora." - Buda</blockquote>
+                </div>
+                <div class="carousel-item">
+                    <h3>Desafio Diário</h3>
+                    <p>Meditar por 5 minutos sem distrações.</p>
+                    <button class="start-challenge">Aceitar</button>
+                </div>
+            </div>
             <button id="start-quick">Iniciar Meditação Rápida (5 min)</button>
-            <div id="daily-quote">"A paz vem de dentro. Não a procure fora." - Buda</div>
         </section>
 
         <!-- Seção Temporizador -->
@@ -46,6 +57,8 @@
                 <button data-sound="rain">Chuva</button>
                 <button data-sound="ocean">Oceano</button>
                 <button data-sound="forest">Floresta</button>
+                <button data-sound="bowls">Tigelas Cantantes</button>
+                <button data-sound="binaural">Batidas Binaurais</button>
             </div>
         </section>
 
@@ -53,11 +66,31 @@
         <section id="guided">
             <h2>Meditações Guiadas</h2>
             <ul id="guided-list">
-                <li data-audio="guided1.mp3">Relaxamento Básico (10 min)</li>
-                <li data-audio="guided2.mp3">Mindfulness (15 min)</li>
-                <li data-audio="guided3.mp3">Gratidão (20 min)</li>
+                <li data-audio="guided1.mp3" data-duration="10">Relaxamento Básico (10 min)</li>
+                <li data-audio="guided2.mp3" data-duration="15">Mindfulness (15 min)</li>
+                <li data-audio="guided3.mp3" data-duration="20">Gratidão (20 min)</li>
+                <li data-audio="guided4.mp3" data-duration="10">Sono Profundo (10 min)</li>
+                <li data-audio="guided5.mp3" data-duration="5">Afirmações Diárias (5 min)</li>
             </ul>
             <audio id="guided-audio" controls></audio>
+        </section>
+
+        <!-- Seção Respiração -->
+        <section id="breathwork">
+            <h2>Exercícios de Respiração</h2>
+            <p>Escolha um exercício:</p>
+            <button data-type="4-7-8">4-7-8 Respiração</button>
+            <button data-type="box">Respiração em Caixa</button>
+            <div id="breath-guide"></div>
+            <button id="start-breath">Iniciar</button>
+        </section>
+
+        <!-- Seção Diário -->
+        <section id="journal">
+            <h2>Diário de Meditação</h2>
+            <textarea id="journal-entry" placeholder="Escreva suas reflexões..."></textarea>
+            <button id="save-journal">Salvar</button>
+            <ul id="journal-list"></ul>
         </section>
 
         <!-- Seção Estatísticas -->
@@ -67,6 +100,10 @@
             <p>Tempo total: <span id="total-time">0</span> minutos</p>
             <p>Sequência atual: <span id="streak">0</span> dias</p>
             <canvas id="progress-chart" width="300" height="200"></canvas>
+            <div id="achievements">
+                <h3>Conquistas</h3>
+                <ul></ul>
+            </div>
         </section>
 
         <!-- Seção Configurações -->
@@ -75,12 +112,30 @@
             <label>
                 <input type="checkbox" id="dark-mode"> Modo Escuro
             </label>
+            <select id="theme-select">
+                <option value="default">Tema Padrão</option>
+                <option value="nature">Tema Natureza</option>
+                <option value="zen">Tema Zen</option>
+            </select>
             <label>
                 <input type="checkbox" id="notifications"> Notificações Diárias
+            </label>
+            <label>
+                <input type="checkbox" id="vibrate"> Vibração no Fim da Sessão
             </label>
             <button id="install-btn" style="display: none;">Instalar como App</button>
         </section>
     </main>
+
+    <nav>
+        <button id="home-btn" aria-label="Início"><i class="icon-home"></i></button>
+        <button id="timer-btn" aria-label="Temporizador"><i class="icon-timer"></i></button>
+        <button id="guided-btn" aria-label="Guiadas"><i class="icon-guided"></i></button>
+        <button id="breathwork-btn" aria-label="Respiração"><i class="icon-breath"></i></button>
+        <button id="journal-btn" aria-label="Diário"><i class="icon-journal"></i></button>
+        <button id="stats-btn" aria-label="Estatísticas"><i class="icon-stats"></i></button>
+        <button id="settings-btn" aria-label="Configurações"><i class="icon-settings"></i></button>
+    </nav>
 
     <footer>
         <p>&copy; 2025 ZenFlow. Todos os direitos reservados.</p>
@@ -90,6 +145,8 @@
     <audio id="rain-sound" src="rain.mp3" loop></audio>
     <audio id="ocean-sound" src="ocean.mp3" loop></audio>
     <audio id="forest-sound" src="forest.mp3" loop></audio>
+    <audio id="bowls-sound" src="bowls.mp3" loop></audio>
+    <audio id="binaural-sound" src="binaural.mp3" loop></audio>
 
     <script src="app.js"></script>
     <script>
