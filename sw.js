@@ -1,6 +1,6 @@
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open('zenflow-v1').then((cache) => {
+        caches.open('zenflow-v2').then((cache) => {
             return cache.addAll([
                 '/',
                 '/index.html',
@@ -11,9 +11,13 @@ self.addEventListener('install', (event) => {
                 '/rain.mp3',
                 '/ocean.mp3',
                 '/forest.mp3',
+                '/bowls.mp3',
+                '/binaural.mp3',
                 '/guided1.mp3',
                 '/guided2.mp3',
                 '/guided3.mp3',
+                '/guided4.mp3',
+                '/guided5.mp3',
                 '/icon-192.png',
                 '/icon-512.png'
             ]);
@@ -25,6 +29,15 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request).then((response) => {
             return response || fetch(event.request);
+        })
+    );
+});
+
+self.addEventListener('push', (event) => {
+    const data = event.data.json();
+    event.waitUntil(
+        self.registration.showNotification(data.title, {
+            body: data.body
         })
     );
 });
