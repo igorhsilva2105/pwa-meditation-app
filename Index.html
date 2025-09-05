@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenFlow - App de Meditação</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <meta name="theme-color" content="#4A90E2">
+    <!-- Ícones para PWA -->
+    <link rel="icon" href="icon-192.png" sizes="192x192">
+    <link rel="icon" href="icon-512.png" sizes="512x512">
+    <link rel="apple-touch-icon" href="icon-192.png">
+</head>
+<body>
+    <header>
+        <h1>ZenFlow</h1>
+        <nav>
+            <button id="home-btn">Início</button>
+            <button id="timer-btn">Temporizador</button>
+            <button id="guided-btn">Guiadas</button>
+            <button id="stats-btn">Estatísticas</button>
+            <button id="settings-btn">Configurações</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Seção Início -->
+        <section id="home" class="active">
+            <h2>Bem-vindo ao ZenFlow</h2>
+            <p>Encontre paz e equilíbrio com meditações diárias.</p>
+            <button id="start-quick">Iniciar Meditação Rápida (5 min)</button>
+            <div id="daily-quote">"A paz vem de dentro. Não a procure fora." - Buda</div>
+        </section>
+
+        <!-- Seção Temporizador -->
+        <section id="timer">
+            <h2>Temporizador de Meditação</h2>
+            <div id="timer-display">05:00</div>
+            <input type="number" id="minutes" min="1" max="60" value="5" aria-label="Minutos">
+            <button id="start-timer">Iniciar</button>
+            <button id="pause-timer" disabled>Pausar</button>
+            <button id="reset-timer">Resetar</button>
+            <div id="ambient-sounds">
+                <h3>Sons Ambiente</h3>
+                <button data-sound="rain">Chuva</button>
+                <button data-sound="ocean">Oceano</button>
+                <button data-sound="forest">Floresta</button>
+            </div>
+        </section>
+
+        <!-- Seção Meditações Guiadas -->
+        <section id="guided">
+            <h2>Meditações Guiadas</h2>
+            <ul id="guided-list">
+                <li data-audio="guided1.mp3">Relaxamento Básico (10 min)</li>
+                <li data-audio="guided2.mp3">Mindfulness (15 min)</li>
+                <li data-audio="guided3.mp3">Gratidão (20 min)</li>
+            </ul>
+            <audio id="guided-audio" controls></audio>
+        </section>
+
+        <!-- Seção Estatísticas -->
+        <section id="stats">
+            <h2>Suas Estatísticas</h2>
+            <p>Sessões totais: <span id="total-sessions">0</span></p>
+            <p>Tempo total: <span id="total-time">0</span> minutos</p>
+            <p>Sequência atual: <span id="streak">0</span> dias</p>
+            <canvas id="progress-chart" width="300" height="200"></canvas>
+        </section>
+
+        <!-- Seção Configurações -->
+        <section id="settings">
+            <h2>Configurações</h2>
+            <label>
+                <input type="checkbox" id="dark-mode"> Modo Escuro
+            </label>
+            <label>
+                <input type="checkbox" id="notifications"> Notificações Diárias
+            </label>
+            <button id="install-btn" style="display: none;">Instalar como App</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 ZenFlow. Todos os direitos reservados.</p>
+    </footer>
+
+    <audio id="gong-sound" src="gong.mp3"></audio>
+    <audio id="rain-sound" src="rain.mp3" loop></audio>
+    <audio id="ocean-sound" src="ocean.mp3" loop></audio>
+    <audio id="forest-sound" src="forest.mp3" loop></audio>
+
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('Service Worker registered'))
+                .catch(err => console.error('Service Worker registration failed', err));
+        }
+    </script>
+</body>
+</html>
